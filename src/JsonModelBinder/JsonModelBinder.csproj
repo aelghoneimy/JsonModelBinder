@@ -4,7 +4,7 @@
     <TargetFramework>netstandard1.5</TargetFramework>
     <Authors>Ayman Gaafar</Authors>
     <Company />
-    <Description />
+    <Description>Enables patching of models.</Description>
     <PackageLicenseUrl>https://github.com/AymanGaafar/JsonModelBinder/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AymanGaafar/JsonModelBinder</PackageProjectUrl>
     <RepositoryUrl>https://github.com/AymanGaafar/JsonModelBinder</RepositoryUrl>
@@ -13,6 +13,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Copyright>© 2017</Copyright>
+    <PackageId>MoonLight.JsonModelBinder</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
