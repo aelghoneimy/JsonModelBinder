@@ -78,7 +78,7 @@
 
         public void Add(TKey1 key1, TKey2 key2, TValue value)
         {
-            Add(new CacheKeyPair<TKey1, TKey2>(key1, key2), value);
+            base[new CacheKeyPair<TKey1, TKey2>(key1, key2)] = value;
         }
 
         public bool ContainsKey(TKey1 key1, TKey2 key2)
