@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Converters;
+    using Newtonsoft.Json;
 
     public interface IPatchDocument : IPatchBase, IApplicableNew, IEnumerable<IPatchBase>
     {
@@ -15,6 +17,7 @@
         bool Contains(IPatchBase item);
     }
 
+    [JsonConverter(typeof(PatchDocumentJsonConverter))]
     public interface IPatchDocument<T> : IPatchDocument
     {
         Task Apply(T model);

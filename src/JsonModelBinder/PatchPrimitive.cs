@@ -64,8 +64,11 @@
             var assemblyQualifiedName = modelType.AssemblyQualifiedName;
             var propertyInfo = PropertyInfos[assemblyQualifiedName, Name]
                 ?? modelType.GetTypeInfo().GetProperty(Name);
-            
-            propertyInfo.SetValue(model, Value);
+
+            if (Found)
+            {
+                propertyInfo.SetValue(model, Value);
+            }
 
             return EmptyTask;
         }

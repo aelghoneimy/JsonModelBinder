@@ -84,12 +84,13 @@
 
         public static bool IsPrimitiveWise(this Type type)
         {
-            var typeInfo = type.GetTypeInfo();
-
-            return typeInfo.IsPrimitive
-                   || typeInfo.IsEnum
+            return type.IsPrimitive
+                   || type.IsEnum
+                   || type == typeof(decimal)
                    || type == typeof(string)
-                   || type == typeof(DateTime);
+                   || type == typeof(DateTime)
+                   || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+                       IsPrimitiveWise(type.GetGenericArgument()));
         }
 
         public static bool IsIEnumerable(this Type type)

@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
+    using Converters;
 
     public interface IPatchArray : IPatchBase, IApplicableNew, IEnumerable<IPatchArrayDocument>
     {
@@ -15,6 +17,7 @@
         bool Contains(IPatchArrayDocument item);
     }
 
+    [JsonConverter(typeof(PatchArrayJsonConverter))]
     public interface IPatchArray<T> : IPatchArray
     {
         new IPatchArrayDocument<T> this[string key] { get; }

@@ -570,12 +570,18 @@
                     var type = typeof(T);
                     boxedValue = reader.Value;
 
-                    if (type.GetTypeInfo().IsEnum)
+                    if (type.IsEnum)
                     {
                         value = (T)Enum.Parse(type, reader.Value?.ToString());
                     }
-                    else if (reader.ValueType == typeof(long) && type != typeof(long))
+                    else if ((reader.ValueType == typeof(long) && type != typeof(long))
+                        || (reader.ValueType == typeof(double) && type != typeof(double)))
                     {
+                        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        {
+                            type = Nullable.GetUnderlyingType(type);
+                        }
+
                         value = (T)Convert.ChangeType(reader.Value, type);
                     }
                     else
@@ -583,7 +589,7 @@
                         value = (T)reader.Value;
                     }
                 }
-                catch (Exception)
+                catch
                 {
                     reader.Skip();
 

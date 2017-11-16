@@ -3,8 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Newtonsoft.Json;
@@ -353,6 +355,67 @@
             // Assert
             Assert.IsFalse(patchDocument.CanPatch(), "PatchDocument should patch");
             Assert.IsTrue(patchDocument.HasErrors(ErrorKinds.ApplyToUpdate), "PatchDocument shouldn't have errors");
+        }
+
+        [TestMethod]
+        public void CamelCasePropertyUpdate()
+        {
+            // Assign
+            _textReader = new StringReader(
+                "{"
+                    + $"'name': 'My Awesome Blog', "
+                    + $"'numberofSubscribers': 20, "
+                    + $"'{nameof(Blog.CreatedOn)}': '2016-06-16T23:25:36Z', "
+                    + $"'{nameof(Blog.Image)}': [102, 200, 32, 45, 255], "
+                    + $"'{nameof(Blog.TestObject)}': {{"
+                        + $"'name': 'KKK', "
+                        + $"'{nameof(TestObject.DateTime)}': '2016-06-16T23:25:36Z', "
+                        + $"'{nameof(TestObject.Number)}': 102, "
+                    + "}, "
+                    + $"'{nameof(Blog.Posts)}': ["
+                        + "{"
+                            + $"'{nameof(Post.BlogId)}': 1, "
+                            + $"'{nameof(Post.Title)}': 'My Awesome post', "
+                            + $"'{nameof(Post.Visibility)}': 1, "
+                            + "_patchType: 2"
+                        + "}"
+                    + "]"
+                + "}");
+
+            _jsonReader = new JsonTextReader(_textReader);
+
+            // Arrange
+            var patchDocument = (PatchDocument<Blog>)_converter.ReadJson(_jsonReader,
+                typeof(PatchDocument<Blog>), null, new JsonSerializer());
+
+            // Assert
+            Assert.IsTrue(patchDocument["NumberofSubscribers"].Found, "NumberofSubscribers should exist");
+            Assert.IsTrue(((PatchDocument<TestObject>)patchDocument["TestObject"])["Name"].Found, "TestObject.Name should exist");
+        }
+
+        [TestMethod]
+        public void CorrectErrorLocalization()
+        {
+            // Assign
+            _textReader = new StringReader(
+                "{"
+                    + $"'name': 'My Very Long name Awesome Blog', "
+                    + $"'numberofSubscribers': 30 "
+                + "}");
+
+            _jsonReader = new JsonTextReader(_textReader);
+
+            CultureInfo.CurrentCulture = new CultureInfo("ar");
+            CultureInfo.CurrentUICulture = new CultureInfo("ar");
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("ar");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("ar");
+
+            // Arrange
+            var patchDocument = (PatchDocument<Blog>)_converter.ReadJson(_jsonReader,
+                typeof(PatchDocument<Blog>), null, new JsonSerializer());
+
+            // Assert
+            Assert.AreEqual("Arabic", patchDocument.Errors.FirstOrDefault(x => x.Name == "Name").Message, "Arabic Error message should appear.");
         }
 
         [TestMethod]

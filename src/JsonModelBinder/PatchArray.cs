@@ -7,9 +7,9 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
     using Converters;
     using Interfaces;
-    using Newtonsoft.Json;
     using static PatchDocumentCache;
 
     [JsonConverter(typeof(PatchArrayJsonConverter))]
@@ -296,14 +296,15 @@
 
             if (model == null) { model = new List<T>(); }
 
-            var modelType = typeof(T);
 
-            var addMethod = modelType.GetTypeInfo().GetMethod(nameof(IList.Add));
+            var addMethod = model.GetType().GetMethod(nameof(IList.Add));
 
             if (addMethod == null)
             {
                 throw new NotSupportedException("Add to the list is not supported.");
             }
+
+            var modelType = typeof(T);
 
             foreach (var document in Values)
             {

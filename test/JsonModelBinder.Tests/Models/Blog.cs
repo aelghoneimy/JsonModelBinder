@@ -5,13 +5,14 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using Attributes;
+    using Resources;
 
     [Bind(nameof(Name), nameof(NumberofSubscribers), nameof(CreatedOn), nameof(Image), nameof(TestObject), nameof(Posts))]
     public class Blog
     {
         [Key]
         public int BlogId { get; set; }
-        [StringLength(15)]
+        [StringLength(15, ErrorMessageResourceName = nameof(Resources.StringLengthError), ErrorMessageResourceType = typeof(Resources))]
         public string Name { get; set; }
         [Range(10, 25)]
         public short NumberofSubscribers { get; set; }
