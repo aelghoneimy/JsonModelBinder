@@ -8,7 +8,7 @@ When you send data to the server you send either a Model or IEnumerable\<Model>;
 
 Consider the below two JSONs:
 
-```json
+```javascript
 {
     // 'id': 1, // id is optional
     'name': 'First Post', // Update the post name
@@ -35,7 +35,7 @@ To use JsonModelBinder you need to serialize the model as normal JSON. When patc
 
 Note that when patching an array, an extra property (`_patchType`) needs to be included which will identify if the array entry will be created, patched or deleted. If applying the create operation on the root document or array, this property is ignored as all the entries will be created.
 
-```json
+```javascript
 [
     {
         '_patchType': 1,
