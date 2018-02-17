@@ -1,5 +1,7 @@
 # JsonModelBinder
 
+[Nuget](https://www.nuget.org/packages/MoonLight.JsonModelBinder/)
+
 JsonModelBinder allows you to add patching capabilities to your Models.
 
 ## How it works
